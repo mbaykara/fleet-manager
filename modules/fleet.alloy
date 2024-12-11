@@ -10,7 +10,7 @@ declare "stack" {
 
 			basic_auth {
 				username = sys.env("GRAFANA_PROM_ID")
-				password = sys.env("GRAFANA_PASSWORD")
+				password = sys.env("GRAFANA_CLOUD_TOKEN")
 			}
 		}
 		external_labels = {"collector_id" = constants.hostname}
@@ -22,7 +22,7 @@ declare "stack" {
 
 			basic_auth {
 				username = sys.env("GRAFANA_LOKI_ID")
-				password = sys.env("GRAFANA_LOKI_PASSWORD")
+				password = sys.env("GRAFANA_CLOUD_TOKEN")
 			}
 		}
 	}
