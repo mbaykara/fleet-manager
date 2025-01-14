@@ -1,0 +1,19 @@
+declare "stack" {
+  prometheus.exporter.self "example" {}
+  prometheus.scrape "demo" {
+    targets    = prometheus.exporter.self.example.targets
+    forward_to = [prometheus.remote_write.demo.receiver]
+   }
+
+  prometheus.remote_write "demo" {
+        endpoint {
+            url = sys.env("GRAFANA_PROM_URL")
+    
+            basic_auth {
+                username = sys.env("GRAFANA_PROM_ID")
+                password = sys.env("GRAFANA_CLOUD_TOKEN")
+            }
+        }
+        external_labels = {"collector_id" = constants.hostname}
+    }
+}

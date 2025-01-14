@@ -1,0 +1,21 @@
+declare "stack" {
+
+	prometheus.remote_write "default" {
+		endpoint {
+			url = sys.env("GRAFANA_PROM_URL")
+
+			basic_auth {
+				username = sys.env("GRAFANA_PROM_ID")
+				password = sys.env("GRAFANA_CLOUD_TOKEN")
+			}
+		}
+		external_labels = {"collector_id" = constants.hostname}
+	}
+
+	prometheus.exporter.unix "node" { }
+
+	prometheus.scrape "node" {
+		targets    = prometheus.exporter.unix.node.targets
+		forward_to = [prometheus.remote_write.default.receiver]
+	}
+}
