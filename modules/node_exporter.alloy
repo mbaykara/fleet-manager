@@ -1,6 +1,13 @@
 declare "stack" {
 
-	prometheus.remote_write "default" {
+	prometheus.exporter.unix "node" { }
+
+	prometheus.scrape "node" {
+		targets    = prometheus.exporter.unix.node.targets
+		forward_to = [prometheus.remote_write.cloud_metrics.receiver]
+	}
+
+	prometheus.remote_write "cloud_metrics" {
 		endpoint {
 			url = sys.env("GRAFANA_PROM_URL")
 
@@ -10,12 +17,5 @@ declare "stack" {
 			}
 		}
 		external_labels = {"collector_id" = constants.hostname}
-	}
-
-	prometheus.exporter.unix "node" { }
-
-	prometheus.scrape "node" {
-		targets    = prometheus.exporter.unix.node.targets
-		forward_to = [prometheus.remote_write.default.receiver]
 	}
 }

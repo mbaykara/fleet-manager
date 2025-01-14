@@ -1,11 +1,11 @@
 declare "stack" {
   prometheus.exporter.self "example" {}
-  prometheus.scrape "demo" {
+  prometheus.scrape "self" {
     targets    = prometheus.exporter.self.example.targets
-    forward_to = [prometheus.remote_write.demo.receiver]
+    forward_to = [prometheus.remote_write.cloud_metrics.receiver]
    }
 
-  prometheus.remote_write "demo" {
+  prometheus.remote_write "cloud_metrics" {
         endpoint {
             url = sys.env("GRAFANA_PROM_URL")
     
