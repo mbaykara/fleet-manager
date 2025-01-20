@@ -1,4 +1,4 @@
-declare "stack" {
+declare "node_exporter" {
 
 	prometheus.exporter.unix "node" { }
 
